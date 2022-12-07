@@ -4,7 +4,7 @@ const ColorContext = createContext();
 
 export function ColorProvider({ children }) {
   const [colorBg, setColorBg] = useState("rgba(190,130,190,1)");
-  const [colorLight, setColorLight] = useState();
+  const [colorLight, setColorLight] = useState("rgba(290,230,290,1)");
 
   const handleColor = (newColor) => {
     const strColor =

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import styled from "@emotion/styled";
 import ColorContext from "../ColorContext";
+import CalcContent from "./CalcContent";
 
 const Container = styled.div`
   display: flex;
@@ -23,7 +24,9 @@ export default function Calculator() {
           backgroundColor: colorLight,
           border: "1px solid grey",
         }}
-      ></Box>
+      >
+        <CalcContent />
+      </Box>
     </Container>
   );
 }

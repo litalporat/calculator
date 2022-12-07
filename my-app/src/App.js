@@ -1,6 +1,5 @@
-import "./App.css";
 import { ColorProvider } from "./ColorContext";
-import Page from "./Page";
+import Page from "./Components/Page";
 
 function App() {
   return (
