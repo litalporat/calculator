@@ -1,13 +1,11 @@
 import { Container, Divider, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import { useEffect } from "react";
 import { useState } from "react";
 
 export default function CalcContent() {
   const [input, setInput] = useState("");
   const [toReset, setToReset] = useState(false);
-  const parentheses = 0;
   const calcButtons = [
     "AC",
     "(",
@@ -31,25 +29,35 @@ export default function CalcContent() {
     "=",
   ];
 
+  const inputCheck = (char) => {
+    let new_input = input;
+    const lastChar =
+      new_input.length > 0 ? new_input[new_input.length - 1] : null;
+    const operators = ["-", "+", "x", "/"];
+    if (toReset === true) {
+      setToReset(false);
+      new_input = "";
+    }
+    if (operators.includes(char)) {
+      if (operators.includes(lastChar)) new_input = new_input.slice(0, -1);
+      if (input === "") char = "";
+      if (lastChar === "(" && char !== "-") char = "";
+    } else {
+      if (lastChar === ")") char = "";
+    }
+    return new_input + char;
+  };
+
   const setInputField = (e) => {
     if (e.currentTarget.id === "AC") setInput("");
     else if (e.currentTarget.id === "=") {
       setToReset(true);
-      while (parentheses > 0) setInput(input + ")");
-      setInput(calcFunc(input));
+      if (input !== "") setInput(calcFunc(input));
     } else if (e.currentTarget.id === "←") {
       const new_input = input.slice(0, -1);
       setInput(new_input);
     } else {
-      let new_input = input + e.currentTarget.id;
-      if (toReset === true) {
-        setToReset(false);
-        console.log("in reset");
-        new_input = e.currentTarget.id;
-      }
-
-      setInput(new_input);
-      console.log(input);
+      setInput(inputCheck(e.currentTarget.id));
     }
   };
 
@@ -92,6 +100,7 @@ export default function CalcContent() {
 
   const reformat = (expression) => {
     const tempExp = expression
+      .replaceAll("()", "")
       .replaceAll("(-", "(0-")
       .replaceAll("-", ",-,")
       .replaceAll("+", ",+,")
@@ -104,7 +113,19 @@ export default function CalcContent() {
     return tempExp.split(",");
   };
 
+  const checkParentheses = (str) => {
+    let parentheses = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === "(") parentheses++;
+      if (str[i] === ")") parentheses--;
+    }
+    if (parentheses === 0) return true;
+    else return false;
+  };
+
   const calcFunc = (str) => {
+    if (checkParentheses(str) === false)
+      return "Error! please check parentheses";
     const expression = str;
     const split = reformat(expression);
 
