@@ -51,8 +51,18 @@ export default function CalcContent() {
   const setInputField = (e) => {
     if (e.currentTarget.id === "AC") setInput("");
     else if (e.currentTarget.id === "=") {
-      setToReset(true);
-      if (input !== "") setInput(calcFunc(input));
+      if (input !== "") {
+        setToReset(true);
+        const lastChar = input[input.length - 1];
+        if (
+          lastChar === "-" ||
+          lastChar === "+" ||
+          lastChar === "x" ||
+          lastChar === "/"
+        )
+          setInput(calcFunc(input.slice(0, -1)));
+        else setInput(calcFunc(input));
+      }
     } else if (e.currentTarget.id === "←") {
       const new_input = input.slice(0, -1);
       setInput(new_input);
